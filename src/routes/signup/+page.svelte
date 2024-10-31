@@ -19,9 +19,6 @@
     return goto('/')
   }
 
-  const navigateToSignup = () => {
-    goto('/signup')
-  }
 </script>
 
 <div class="row">
@@ -43,7 +40,7 @@
 </div>
 <div class="row bottom-margin row-margins">
   <div class="col-xs-12">
-    <center>
+    <center class="gallery">
       <div class="col-lg-8 col-lg-offset-2 col-xs-12 no-side-padding">
                 <b><p>LigerBots team registration is for students registered in the Newton Public Schools
         high schools and their parents/guardians, and for LigerBots Mentors and Coaches, only.
@@ -118,7 +115,7 @@
                   <!-- There are two different sections of the form based on whether the user selected "student" or "parent" -->
                     {#if userType === 'student'}
                     <div class="form-section student">
-                      <label class="required">Parent/Guardian names</label>
+                      <label class="required" for="parent-names">Parent/Guardian names</label>
                       <!-- allows for multiple copies of input elements via some scripting 
                            used to display a variable number of parent name inputs -->
                       <div class="multi-input">
@@ -166,7 +163,7 @@
 
                     {#if userType === 'adult'}
                     <div class="roles-group">
-                    <label class="required" for="adult-role">Adult roles</label>
+                    <label class="required" id="required" for="adult-role">Adult roles</label>
                     <div class="checkbox lb-checkbox">
                       <label >
                         <input type="checkbox" id="adult-role" name="role-parent" disabled> Parent/Guardian
@@ -180,7 +177,7 @@
                     </div>
                   </div>
                     <div class="form-section parent">
-                      <label class="required">Child(ren)'s Name(s)</label>
+                      <label class="required" for="child-names">Child(ren)'s Name(s)</label>
                       <!-- same idea as the one for the student section -->
                       <div class="multi-input">
                         <script type="text/html+template" class="multi-input-template">
@@ -212,16 +209,17 @@
                   <div class="spacer"></div>
 
                   <div class="form-group">
-                    <label class="required">Password</label>
+                    <label class="required" for="password">Password</label>
                     <div class="lb-input-group">
-                      <input type="password" pattern="" class="form-control" placeholder="Password" name="password" aria-describedby="passwordHelp">
-                      <input type="password" class="form-control" placeholder="Confirm" name="password-confirm" >
+                      <input type="password" id="password" pattern="" class="form-control" placeholder="Password" name="password" aria-describedby="passwordHelp">
+                      <input type="password" id="password" class="form-control" placeholder="Confirm" name="password-confirm" >
                     </div>
                     <span id="passwordHelp" class="help-block">Password must be a minimum of 8 characters and contain mixed case and at least 1 digit.</span>
                   </div>
                   
                   <div class="help-block">
-                    <label class="required"></label> required
+      
+                    <label class="required" for="required"></label> required
                   </div>
                   <button type="submit" name="register" class="btn btn-default">Submit</button>
                 </form>
@@ -230,3 +228,10 @@
     </center>
   </div>
 </div>
+
+<style>
+  .required::after {
+    content: "\002A";
+    color: red;
+  }
+</style>
