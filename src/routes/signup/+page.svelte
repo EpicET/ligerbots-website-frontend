@@ -19,26 +19,26 @@
   let parentNames = [{ firstName: '', lastName: '' }];
   let childNames = [{ firstName: '', lastName: '' }];
 
-  // Function to add a new name input field
+  
+  // Adding and removing parent names
   const addParentName = () => {
     parentNames = [...parentNames, { firstName: '', lastName: '' }];
   };
 
-  // Function to remove a specific name input field
   const removeParentName = (/** @type {number}*/ index) => {
     parentNames = parentNames.filter((_, i) => i !== index);
   };
 
-  // Function to add a new child name input field
+  // Adding and removing child names
   const addChildName = () => {
-    console.log("Adding child name");
     childNames = [...childNames, { firstName: '', lastName: '' }];
   };
 
-  // Function to remove a specific child name input field
   const removeChildName = (/** @type {number}*/ index) => {
     childNames = childNames.filter((_, i) => i !== index);
   };
+
+  
 
   const handleSubmit = (/** @type {Event} */ evt) => {
     let signUpFields = { username, email, password, userType};
@@ -368,7 +368,7 @@
           <div class="form-section parent">
             <label class="required" for="child-names">Child(ren)'s Name(s)</label>
             <div class="multi-input">
-              <!-- Render each parent name input group -->
+              <!-- Render each child name input group -->
               {#each childNames as child, index}
                 <div class="lb-input-group name-group multi-name-group">
                   <input
