@@ -16,6 +16,30 @@
   /** @type {Array<string>} */
   let adultRole = [];
 
+  let parentNames = [{ firstName: '', lastName: '' }];
+  let childNames = [{ firstName: '', lastName: '' }];
+
+  // Function to add a new name input field
+  const addParentName = () => {
+    parentNames = [...parentNames, { firstName: '', lastName: '' }];
+  };
+
+  // Function to remove a specific name input field
+  const removeParentName = (/** @type {number}*/ index) => {
+    parentNames = parentNames.filter((_, i) => i !== index);
+  };
+
+  // Function to add a new child name input field
+  const addChildName = () => {
+    console.log("Adding child name");
+    childNames = [...childNames, { firstName: '', lastName: '' }];
+  };
+
+  // Function to remove a specific child name input field
+  const removeChildName = (/** @type {number}*/ index) => {
+    childNames = childNames.filter((_, i) => i !== index);
+  };
+
   const handleSubmit = (/** @type {Event} */ evt) => {
     let signUpFields = { username, email, password, userType};
     alert(signUpFields);
@@ -220,12 +244,14 @@
           <!-- allows for multiple copies of input elements via some scripting 
                             used to display a variable number of parent name inputs -->
           <div class="multi-input">
-            <script type="text/html+template" class="multi-input-template">
+            <!-- Render each parent name input group -->
+            {#each parentNames as parent, index}
               <div class="lb-input-group name-group multi-name-group">
                 <input
                   type="text"
                   class="form-control"
                   placeholder="John"
+                  bind:value={parentNames[index].firstName}
                   name="parent-first-name[]"
                   data-required
                 />
@@ -233,6 +259,7 @@
                   type="text"
                   class="form-control"
                   placeholder="Smith"
+                  bind:value={parentNames[index].lastName}
                   name="parent-last-name[]"
                   data-required
                 />
@@ -240,42 +267,24 @@
                   <button
                     class="btn btn-default multi-input-remove"
                     type="button"
+                    disabled={parentNames.length === 1}
+                    on:click={() => removeParentName(index)}
                   >
                     X
                   </button>
                 </span>
-              </div>;
-            </script>
-            <div class="multi-input-items">
-              <div class="lb-input-group name-group multi-name-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="John"
-                  name="parent-first-name[]"
-                  data-required=""
-                />
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Smith"
-                  name="parent-last-name[]"
-                  data-required=""
-                />
-                <span class="input-group-btn">
-                  <button
-                    class="btn btn-default multi-input-remove"
-                    type="button">X</button
-                  >
-                </span>
               </div>
+              <div class="spacer"></div>
+            {/each}
             </div>
-            <div class="spacer"></div>
-            <div class="multi-input-buttons">
-              <button type="button" class="btn multi-input-add"> Add </button>
-            </div>
-            <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="multi-input-buttons">
+            <button type="button" class="btn multi-input-add" on:click={addParentName}>
+              Add
+            </button>
           </div>
+          <div class="spacer"></div>
+       
 
           <div class="form-group">
             <label class="required" for="parent-email"
@@ -359,12 +368,14 @@
           <div class="form-section parent">
             <label class="required" for="child-names">Child(ren)'s Name(s)</label>
             <div class="multi-input">
-              <script type="text/html+template" class="multi-input-template">
+              <!-- Render each parent name input group -->
+              {#each childNames as child, index}
                 <div class="lb-input-group name-group multi-name-group">
                   <input
                     type="text"
                     class="form-control"
                     placeholder="John"
+                    bind:value={childNames[index].firstName}
                     name="child-first-name[]"
                     data-required
                   />
@@ -372,6 +383,7 @@
                     type="text"
                     class="form-control"
                     placeholder="Smith"
+                    bind:value={childNames[index].lastName}
                     name="child-last-name[]"
                     data-required
                   />
@@ -379,41 +391,23 @@
                     <button
                       class="btn btn-default multi-input-remove"
                       type="button"
+                      disabled={childNames.length === 1}
+                      on:click={() => removeChildName(index)}
                     >
                       X
                     </button>
                   </span>
-                </div>;
-              </script>
-              <div class="multi-input-items">
-                <div class="lb-input-group name-group multi-name-group">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="John"
-                    name="child-first-name[]"
-                    data-required=""
-                  />
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Smith"
-                    name="child-last-name[]"
-                    data-required=""
-                  />
-                  <span class="input-group-btn">
-                    <button
-                      class="btn btn-default multi-input-remove"
-                      type="button">X</button
-                    >
-                  </span>
                 </div>
+                <div class="spacer"></div>
+              {/each}
               </div>
-              <div class="spacer"></div>
-              <div class="multi-input-buttons">
-                <button type="button" class="btn multi-input-add"> Add </button>
-              </div>
+            <div class="spacer"></div>
+            <div class="multi-input-buttons">
+              <button type="button" class="btn multi-input-add" on:click={addChildName}>
+                Add
+              </button>
             </div>
+            <div class="spacer"></div>
           </div>
         {/if}
       {/if}
@@ -456,10 +450,3 @@
   </div>
 </div>
 
-<!-- <style>
-  .page-body {
-    margin-left: 0px;
-    margin-right: 0px;
-    background-color: rgba(255, 255, 255, 1.0);
-  }
-</style> -->
