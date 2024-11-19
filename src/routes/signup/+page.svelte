@@ -11,10 +11,28 @@
   let username;
 
   /** @type {string}*/
+  let firstname;
+
+  /** @type {string}*/
+  let lastname;
+
+  /** @type {string}*/
+  let school;
+
+  /** @type {string}*/
+  let address;
+
+  /** @type {string}*/
+  let phone_number;
+
+  /** @type {string}*/
+  let graduation_year; // should be a number
+
+  /** @type {string}*/
   let userType;
 
   /** @type {Array<string>} */
-  let adultRole = [];
+  let groups = [];
 
   let parentNames = [{ firstName: '', lastName: '' }];
   let childNames = [{ firstName: '', lastName: '' }];
@@ -41,7 +59,8 @@
   
 
   const handleSubmit = (/** @type {Event} */ evt) => {
-    let signUpFields = { username, email, password, userType};
+    let fullname = `${firstname} ${lastname}`;
+    let signUpFields = { username, email, password, fullname, phone_number, address, school, groups, graduation_year };
     alert(signUpFields);
     return goto("/");
   };
@@ -93,6 +112,7 @@
           class="form-control"
           placeholder="liger123"
           name="username"
+          bind:value={username}
           aria-describedby="usernameHelp"
           required
         />
@@ -110,6 +130,7 @@
           class="form-control"
           placeholder="john.smith@gmail.com"
           name="email"
+          bind:value={email}
           aria-describedby="emailHelp"
           required
         />
@@ -129,12 +150,14 @@
             class="form-control"
             placeholder="John"
             name="first-name"
+            bind:value={firstname}
           />
           <input
             type="text"
             class="form-control"
             placeholder="Smith"
             name="last-name"
+            bind:value={lastname}
           />
         </div>
       </div>
@@ -148,6 +171,7 @@
           class="form-control"
           placeholder="123-456-7890"
           name="phone"
+          bind:value={phone_number}
         />
       </div>
 
@@ -158,6 +182,7 @@
           class="form-control"
           placeholder="Address line"
           name="address"
+          bind:value={address}
         />
         <div class="spacer"></div>
         <div class="lb-input-group address-group">
@@ -193,6 +218,7 @@
             id="school"
             name="school"
             value="North"
+            bind:group={school}
             required
           /> Newton North
         </label>
@@ -202,11 +228,12 @@
             id="school"
             name="school"
             value="South"
+            bind:group={school}
             required
           /> Newton South
         </label>
         <label>
-          <input type="radio" id="school" name="school" value="none" required />
+          <input type="radio" id="school" name="school" value="none" bind:group={school} required />
           N/A
         </label>
       </div>
@@ -323,6 +350,7 @@
               name="graduation"
               min="2020"
               max="2035"
+              bind:value={graduation_year}
             />
           </div>
         </div>
@@ -339,7 +367,7 @@
                 id="adult-role"
                 name="role-parent"
                 value="role-parent"
-                bind:group={adultRole}
+                bind:group={groups}
               /> Parent/Guardian
             </label>
             <label>
@@ -348,7 +376,7 @@
                 id="adult-role"
                 name="role-mentor"
                 value="role-mentor"
-                bind:group={adultRole}
+                bind:group={groups}
               /> Mentor
             </label>
             <label>
@@ -357,13 +385,13 @@
                 id="adult-role"
                 name="role-coach"
                 value="role-coach"
-                bind:group={adultRole}
+                bind:group={groups}
               /> Coach
             </label>
           </div>
         </div>
         
-        {#if adultRole.includes("role-parent")}
+        {#if groups.includes("role-parent")}
          <!-- same idea as the one for the student section -->
           <div class="form-section parent">
             <label class="required" for="child-names">Child(ren)'s Name(s)</label>
@@ -424,6 +452,7 @@
             class="form-control"
             placeholder="Password"
             name="password"
+            bind:value={password}
             aria-describedby="passwordHelp"
           />
           <input
