@@ -1,17 +1,14 @@
 <script>
   import { goto } from "$app/navigation";
-  import TopForm from "./TopForm.svelte";
-  import StudentForm from "./StudentForm.svelte";
-  import AdultForm from "./AdultForm.svelte";
+  import TopForm from "$lib/components/signup/TopForm.svelte";
+  import StudentForm from "$lib/components/signup/StudentForm.svelte";
+  import AdultForm from "$lib/components/signup/AdultForm.svelte";
+
+  /** @type {string}*/
+  let username; // not defined in the User class
 
   /** @type {string}*/
   let email;
-
-  /** @type {string}*/
-  let password;
-
-  /** @type {string}*/
-  let username;
 
   /** @type {string}*/
   let firstname;
@@ -20,32 +17,50 @@
   let lastname;
 
   /** @type {string}*/
+  let address;
+
+  /** @type {string}*/
   let school;
 
   /** @type {string}*/
-  let address;
+  let graduation_year; // defined as string in the User class but input as number here
+
+
+  // user type is either "student" or "adult" and determines which form is displayed
+  /** @type {string}*/
+  let userType;
+
+  // groups contains the roles of adult users
+  /** @type {Array<string>} */
+  let groups = [];
 
   /** @type {string}*/
   let phone_number;
 
   /** @type {string}*/
-  let graduation_year; // should be a number
+  let password;
 
-  /** @type {string}*/
-  let userType;
-
-  /** @type {Array<string>} */
-  let groups = [];
-
+  // parentNames are used in the student form
   let parentNames = [{ firstName: '', lastName: '' }];
+
+  // childNames are used in the adult form
   let childNames = [{ firstName: '', lastName: '' }];
 
-  const handleSubmit = (/** @type {Event} */ evt) => {
+  async function handleSubmit(/** @type {Event} */ evt) {
     let fullname = `${firstname} ${lastname}`;
     let signUpFields = { username, email, password, fullname, phone_number, address, school, groups, graduation_year };
+    const res = await fetch('/api/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(signUpFields)
+    })
+
     // alert(signUpFields);
-    console.log(signUpFields);
-    // return goto("/");
+    const result = await res.json()
+    console.log(result);
+
   };
 </script>
 
@@ -86,7 +101,7 @@
 
 <div class="row side-margins bottom-margin">
   <div class="col-lg-6 col-lg-offset-3 col-xs-12 no-side-padding bottom-margin">
-    <form method="post" on:submit|preventDefault={handleSubmit}>
+    <form method="POST" on:submit|preventDefault={handleSubmit}>
       <TopForm
         bind:username={username}
         bind:email={email}
