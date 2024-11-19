@@ -1,5 +1,8 @@
 <script>
   import { goto } from "$app/navigation";
+  import TopForm from "./TopForm.svelte";
+  import StudentForm from "./StudentForm.svelte";
+  import AdultForm from "./AdultForm.svelte";
 
   /** @type {string}*/
   let email;
@@ -37,32 +40,12 @@
   let parentNames = [{ firstName: '', lastName: '' }];
   let childNames = [{ firstName: '', lastName: '' }];
 
-  
-  // Adding and removing parent names
-  const addParentName = () => {
-    parentNames = [...parentNames, { firstName: '', lastName: '' }];
-  };
-
-  const removeParentName = (/** @type {number}*/ index) => {
-    parentNames = parentNames.filter((_, i) => i !== index);
-  };
-
-  // Adding and removing child names
-  const addChildName = () => {
-    childNames = [...childNames, { firstName: '', lastName: '' }];
-  };
-
-  const removeChildName = (/** @type {number}*/ index) => {
-    childNames = childNames.filter((_, i) => i !== index);
-  };
-
-  
-
   const handleSubmit = (/** @type {Event} */ evt) => {
     let fullname = `${firstname} ${lastname}`;
     let signUpFields = { username, email, password, fullname, phone_number, address, school, groups, graduation_year };
-    alert(signUpFields);
-    return goto("/");
+    // alert(signUpFields);
+    console.log(signUpFields);
+    // return goto("/");
   };
 </script>
 
@@ -104,139 +87,15 @@
 <div class="row side-margins bottom-margin">
   <div class="col-lg-6 col-lg-offset-3 col-xs-12 no-side-padding bottom-margin">
     <form method="post" on:submit|preventDefault={handleSubmit}>
-      <div class="form-group">
-        <label class="required" for="desired-username">Desired Username</label>
-        <input
-          type="text"
-          id="desired-username"
-          class="form-control"
-          placeholder="liger123"
-          name="username"
-          bind:value={username}
-          aria-describedby="usernameHelp"
-          required
-        />
-        <span id="usernameHelp" class="help-block"
-          >At least 3 characters. Allows letters, numbers, underscore and
-          period.</span
-        >
-      </div>
-
-      <div class="form-group">
-        <label class="required" for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          class="form-control"
-          placeholder="john.smith@gmail.com"
-          name="email"
-          bind:value={email}
-          aria-describedby="emailHelp"
-          required
-        />
-        <span id="emailHelp"
-          >Do <b>not</b> use an NPS student email; it cannot be used outside of
-          NPS.<br />
-          The LigerBots rely heavily on Google Drive, so an account with access to
-          Google is preferable.</span
-        >
-      </div>
-
-      <div class="form-group">
-        <label class="required" for="name">Name</label>
-        <div class="lb-input-group name-group">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="John"
-            name="first-name"
-            bind:value={firstname}
-          />
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Smith"
-            name="last-name"
-            bind:value={lastname}
-          />
-        </div>
-      </div>
-
-      <div class="form-group phone-group">
-        <label class="required" for="phone">Phone</label>
-        <input
-          type="text"
-          id="phone"
-          maxlength="12"
-          class="form-control"
-          placeholder="123-456-7890"
-          name="phone"
-          bind:value={phone_number}
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="required" for="address">Address</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Address line"
-          name="address"
-          bind:value={address}
-        />
-        <div class="spacer"></div>
-        <div class="lb-input-group address-group">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="City"
-            value="Newton"
-            name="city"
-          />
-          <input
-            type="text"
-            class="form-control"
-            placeholder="State"
-            value="MA"
-            name="state"
-          />
-          <input
-            type="number"
-            class="form-control"
-            placeholder="Zip code"
-            name="postalcode"
-            maxlength="5"
-          />
-        </div>
-      </div>
-
-      <label class="required" for="school">School</label>
-      <div class="radio lb-checkbox">
-        <label>
-          <input
-            type="radio"
-            id="school"
-            name="school"
-            value="North"
-            bind:group={school}
-            required
-          /> Newton North
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="school"
-            name="school"
-            value="South"
-            bind:group={school}
-            required
-          /> Newton South
-        </label>
-        <label>
-          <input type="radio" id="school" name="school" value="none" bind:group={school} required />
-          N/A
-        </label>
-      </div>
+      <TopForm
+        bind:username={username}
+        bind:email={email}
+        bind:firstname={firstname}
+        bind:lastname={lastname}
+        bind:phone_number={phone_number}
+        bind:address={address}
+        bind:school={school}
+      />
 
       <label class="required" for="user-type">I am a...</label>
       <div class="radio lb-checkbox">
@@ -264,180 +123,17 @@
 
       <!-- There are two different sections of the form based on whether the user selected "student" or "parent" -->
       {#if userType === "student"}
-        <div class="form-section student">
-          <label class="required" for="parent-names"
-            >Parent/Guardian names</label
-          >
-          <!-- allows for multiple copies of input elements via some scripting 
-                            used to display a variable number of parent name inputs -->
-          <div class="multi-input">
-            <!-- Render each parent name input group -->
-            {#each parentNames as parent, index}
-              <div class="lb-input-group name-group multi-name-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="John"
-                  bind:value={parentNames[index].firstName}
-                  name="parent-first-name[]"
-                  data-required
-                />
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Smith"
-                  bind:value={parentNames[index].lastName}
-                  name="parent-last-name[]"
-                  data-required
-                />
-                <span class="input-group-btn">
-                  <button
-                    class="btn btn-default multi-input-remove"
-                    type="button"
-                    disabled={parentNames.length === 1}
-                    on:click={() => removeParentName(index)}
-                  >
-                    X
-                  </button>
-                </span>
-              </div>
-              <div class="spacer"></div>
-            {/each}
-            </div>
-          <div class="spacer"></div>
-          <div class="multi-input-buttons">
-            <button type="button" class="btn multi-input-add" on:click={addParentName}>
-              Add
-            </button>
-          </div>
-          <div class="spacer"></div>
-       
-
-          <div class="form-group">
-            <label class="required" for="parent-email"
-              >Parent/Guardian email</label
-            >
-            <input
-              type="email"
-              id="parent-email"
-              class="form-control"
-              placeholder="john.smith@example.com"
-              name="parent_email"
-              data-required=""
-            />
-          </div>
-
-          <div class="form-group phone-group">
-            <label class="required" for="emergency-phone">Emergency Phone</label
-            >
-            <input
-              type="text"
-              id="emergency-phone"
-              maxlength="14"
-              class="form-control"
-              placeholder="123-456-7890"
-              name="emergency_phone"
-              data-required=""
-            />
-          </div>
-
-          <div class="form-group">
-            <label class="required" for="graduation">Graduation year</label>
-            <input
-              type="number"
-              id="graduation"
-              class="form-control"
-              name="graduation"
-              min="2020"
-              max="2035"
-              bind:value={graduation_year}
-            />
-          </div>
-        </div>
+        <StudentForm
+          bind:parentNames={parentNames}
+          bind:graduation_year={graduation_year}
+          />
       {/if}
 
       {#if userType === "adult"}
-        <div class="roles-group active">
-          <label class="required" id="required" for="adult-role"
-            >Adult roles</label>
-          <div class="checkbox lb-checkbox">
-            <label>
-              <input
-                type="checkbox"
-                id="adult-role"
-                name="role-parent"
-                value="role-parent"
-                bind:group={groups}
-              /> Parent/Guardian
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                id="adult-role"
-                name="role-mentor"
-                value="role-mentor"
-                bind:group={groups}
-              /> Mentor
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                id="adult-role"
-                name="role-coach"
-                value="role-coach"
-                bind:group={groups}
-              /> Coach
-            </label>
-          </div>
-        </div>
-        
-        {#if groups.includes("role-parent")}
-         <!-- same idea as the one for the student section -->
-          <div class="form-section parent">
-            <label class="required" for="child-names">Child(ren)'s Name(s)</label>
-            <div class="multi-input">
-              <!-- Render each child name input group -->
-              {#each childNames as child, index}
-                <div class="lb-input-group name-group multi-name-group">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="John"
-                    bind:value={childNames[index].firstName}
-                    name="child-first-name[]"
-                    data-required
-                  />
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Smith"
-                    bind:value={childNames[index].lastName}
-                    name="child-last-name[]"
-                    data-required
-                  />
-                  <span class="input-group-btn">
-                    <button
-                      class="btn btn-default multi-input-remove"
-                      type="button"
-                      disabled={childNames.length === 1}
-                      on:click={() => removeChildName(index)}
-                    >
-                      X
-                    </button>
-                  </span>
-                </div>
-                <div class="spacer"></div>
-              {/each}
-              </div>
-            <div class="spacer"></div>
-            <div class="multi-input-buttons">
-              <button type="button" class="btn multi-input-add" on:click={addChildName}>
-                Add
-              </button>
-            </div>
-            <div class="spacer"></div>
-          </div>
-        {/if}
+        <AdultForm
+          bind:groups={groups}
+          bind:childNames={childNames}
+          />
       {/if}
 
       <div class="spacer"></div>
@@ -448,7 +144,7 @@
           <input
             type="password"
             id="password"
-            pattern=""
+            
             class="form-control"
             placeholder="Password"
             name="password"
