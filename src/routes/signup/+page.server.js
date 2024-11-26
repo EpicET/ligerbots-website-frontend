@@ -10,3 +10,20 @@
 
 //   return { site }
 // }
+
+
+
+export const actions = {
+	default: async ({ request }) => {
+        const data = await request.formData();
+        const results = data.values();
+
+        for (const result of results) {
+            console.log(result);
+        }
+
+        const allResults = Array.from(data.values());
+        console.log(allResults);
+
+        }
+};
