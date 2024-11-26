@@ -25,7 +25,6 @@
   /** @type {string}*/
   let graduation_year; // defined as string in the User class but input as number here
 
-
   // user type is either "student" or "adult" and determines which form is displayed
   /** @type {string}*/
   let userType;
@@ -37,8 +36,11 @@
   /** @type {string}*/
   let phone_number;
 
-  /** @type {string}*/
-  let password;
+  /** @type {string} */
+  let password = '';
+
+  /** @type {string} */
+  let password_confirm = '';
 
   // parentNames are used in the student form
   let parentNames = [{ firstName: '', lastName: '' }];
@@ -47,6 +49,10 @@
   let childNames = [{ firstName: '', lastName: '' }];
 
   async function handleSubmit(/** @type {Event} */ evt) {
+    if (password !== password_confirm) {
+      alert('Passwords do not match');
+      return;
+    }
     let fullname = `${firstname} ${lastname}`;
     let signUpFields = { username, email, password, fullname, phone_number, address, school, groups, graduation_year };
     const res = await fetch('/api/signup', {
@@ -117,7 +123,7 @@
         <label>
           <input
             type="radio"
-            id="user-type"
+            id="student"
             name="user-type"
             value="student"
             bind:group={userType}
@@ -127,7 +133,7 @@
         <label>
           <input
             type="radio"
-            id="user-type"
+            id="adult"
             name="user-type"
             value="adult"
             bind:group={userType}
@@ -159,7 +165,8 @@
           <input
             type="password"
             id="password"
-            
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])"
+            autocomplete="new-password"
             class="form-control"
             placeholder="Password"
             name="password"
@@ -168,10 +175,12 @@
           />
           <input
             type="password"
-            id="password"
+            id="password-confirm"
             class="form-control"
             placeholder="Confirm"
             name="password-confirm"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])"
+            bind:value={password_confirm}
           />
         </div>
         <span id="passwordHelp" class="help-block"
